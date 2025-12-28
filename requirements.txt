@@ -1,0 +1,5 @@
+discord.py
+requests
+mailslurp_client
+jishaku
+fake-useragent

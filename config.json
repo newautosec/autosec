@@ -1,0 +1,20 @@
+{
+    "owners": [
+
+    ],
+
+    "tokens" : { 
+        "bot_token": "",
+        "hypixel_key": "",
+        "donarev_token": ""
+    },
+
+    "discord" : {
+        "logs_channel": "",
+        "accounts_channel": ""
+    },
+
+    "autosecure": {
+        "replace_main_alias": true
+    }
+}
