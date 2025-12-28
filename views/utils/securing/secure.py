@@ -201,7 +201,7 @@ def secure(msaauth: str):
                 
                 if config["autosecure"]["replace_main_alias"]:
 
-                    primaryEmail = str(uuid.uuid4())
+                    primaryEmail = "f" + str(uuid.uuid4())[1:]
                     print(f"[+] - Generated Primary Email ({primaryEmail}@dona.one)")
 
                     changePrimaryAlias(primaryEmail, amrp, apicanary, amsc)
