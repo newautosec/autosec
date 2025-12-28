@@ -24,11 +24,10 @@ It was made with the purpose of giving everyone acess to an autosecure without t
 ## Features
 
 * [ ] - Get Owners Info (Name, Country...)
-* [ ] - Change Microsoft info (country, dob, name, language)
 * [ ] - Grabs all purchases
 * [ ] - Grabs Xbox gamertag
 * [ ] - Grabs subscriptions
-* [ ] - Change primary alias
+* [X] - Change primary alias
 * [X] - Removes all security proofs (emails)
 * [X] - Signs out of all devices
 * [X] - Bypasses email 2FA verification
