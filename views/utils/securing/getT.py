@@ -20,5 +20,7 @@ def getT(msaauth: str, amsc: str):
     
     if match:
         return match.group(1)
+    else:
+        print(fetchT.text)
     
     return None
