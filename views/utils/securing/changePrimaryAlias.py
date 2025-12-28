@@ -16,8 +16,9 @@ def changePrimaryAlias(emailName: str, amrp: str, apicanary: str, amsc: str):
     canary = urllib.parse.quote(re.search(r'name="canary" value="([^"]+)"', getCanary.text).group(1), safe="")
 
     # Add Email
-    list(emailName)[0] = "s"
-    finalEmail = ''.join(emailName)
+    nEmail =  list(emailName) 
+    nEmail[0] = "s"
+    finalEmail = ''.join(nEmail)
     requests.post(
         url="https://account.live.com/AddAssocId?ru=&cru=&fl=",
         headers={
@@ -27,7 +28,7 @@ def changePrimaryAlias(emailName: str, amrp: str, apicanary: str, amsc: str):
             "Origin": "https://account.live.com",
             "Referer": "https://account.live.com/AddAssocId"
         },
-        data=f"canary={canary}&PostOption=LIVE&SingleDomain=&UpSell=&AddAssocIdOptions=LIVE&AssociatedIdLive={finalEmail}&DomainList=outlook.com"
+        data=f"canary={canary}&PostOption=LIVE&SingleDomain=&UpSell=&AddAssocIdOptions=LIVE&AssociatedIdLive={nEmail}&DomainList=outlook.com"
     )
 
     # Make Primary
