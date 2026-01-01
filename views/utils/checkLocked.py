@@ -1,6 +1,6 @@
 import requests
 
-def checkLocked(email: str) -> dict:
+async def checkLocked(email: str) -> dict:
     
     # Times out sometimes...
     try:

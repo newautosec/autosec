@@ -1,7 +1,7 @@
 from fake_useragent import UserAgent
 import requests
 
-def sendAuth(email: str) -> dict:
+async def sendAuth(email: str) -> dict:
 
     user = UserAgent()
 

