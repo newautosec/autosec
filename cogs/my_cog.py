@@ -124,15 +124,13 @@ class MyCog(commands.Cog):
         
         getEmails = await fetchEmails(token, email, password[0])
 
-        if getEmails:
-            interaction = await interaction.response.send_message(
-                embed = getEmails,
-                view = ButtonRefresh(token, email, password[0], interaction),
-                ephemeral=True
-            )
-            return
+        interaction = await interaction.response.send_message(
+            embed = getEmails,
+            view = ButtonRefresh(token, email, password[0], interaction),
+            ephemeral=True
+        )
+        return
         
-        await interaction.response.send_message("This email has not been found.", ephemeral=True)
 
     @app_commands.command(name="requestotp", description="Attempts to send an email OTP")
     async def requestotp(self, interaction: discord.Interaction, email: str):
