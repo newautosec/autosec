@@ -1,14 +1,21 @@
-import requests
+import httpx
 import re
 
-def securityInformation(amrp: str):
+async def securityInformation(amrp: str):
 
-    data = requests.get(
-        url = "https://account.live.com/proofs/Manage/additional",
-        headers = {
-            "Cookie": f"AMRPSSecAuth={amrp}"
-        }
-    )
+    async with httpx.AsyncClient() as session:
 
-    match = re.search(r'var\s+t0\s*=\s*(\{.*?\});', data.text, re.DOTALL)
-    return match.group(1)
+        secInfo = await session.get(
+            url = "https://account.live.com/proofs/Manage/additional",
+            headers = {
+                "Cookie": f"AMRPSSecAuth={amrp}"
+            }
+        )
+
+        match = re.search(
+            r'var\s+t0\s*=\s*(\{.*?\});',
+            secInfo.text,
+            re.DOTALL
+        )
+
+        return match.group(1)

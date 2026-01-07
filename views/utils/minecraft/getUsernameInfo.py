@@ -1,21 +1,23 @@
 from dateutil import parser
 import datetime
-import requests
+import httpx
 
-def getUsernameInfo(ssid: str):
+async def getUsernameInfo(ssid: str):
 
-    response = requests.get(
-        url = "https://api.minecraftservices.com/minecraft/profile/namechange",
-        headers = {
-            "Authorization": f"Bearer {ssid}"
-        }
-    ).json()
+    async with httpx.AsyncClient() as session:
 
-    if response["nameChangeAllowed"]:
-        return True
-    
-    todayDate = datetime.datetime.now()
-    finalDate = (parser.parse(response["changedAt"]) + datetime.timedelta(days=31)).replace(tzinfo=None)
+        response = await session.get(
+            url = "https://api.minecraftservices.com/minecraft/profile/namechange",
+            headers = {
+                "Authorization": f"Bearer {ssid}"
+            }
+        )
+        
+        if response.json()["nameChangeAllowed"]:
+            return True
 
-    # Amount of days to change username
-    return (finalDate - todayDate)
+        todayDate = datetime.datetime.now()
+        finalDate = (parser.parse(response.json()["changedAt"]) + datetime.timedelta(days=31)).replace(tzinfo=None)
+
+        # Amount of days to change username
+        return (finalDate - todayDate).days

@@ -1,5 +1,4 @@
 discord.py
-requests
+httpx
 mailslurp_client
 jishaku
-fake-useragent

@@ -1,44 +1,41 @@
-import requests
+import httpx
+import asyncio
 import time
 import re
 
-def getEmailCode(email: str, key: str) -> str:
-    
-    email_id = email.split("@")[0]
+async def getEmailCode(token: str) -> str:
 
-    emails = requests.get(
-       url = f"https://donarev419.com/api/emails/all",
-       headers = {
-           "Authorization": key
-       }
-    ).json()
+    async with httpx.AsyncClient() as session:
+        
+        while True:
 
-    for email in emails["content"]:
-        if email["local"] == email_id:
+            checkEmails = await session.get(
+                url = "https://api.mail.tm/messages",
+                headers = {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    "authorization": f"Bearer {token}"
+                }
+            )
 
-            while True:
-
-                emailData = requests.get(
-                    url = f"https://donarev419.com/api/emails/inbox/{email["id"]}",
+            rJson = checkEmails.json()
+            if rJson:
+                
+                print(rJson)
+                ID = rJson[0]["id"]
+                getEmail = await session.get(
+                    url = f"https://api.mail.tm/messages/{ID}",
                     headers = {
-                        "Authorization": key
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                        "authorization": f"Bearer {token}"
                     }
-                ).json()
+                )
 
-                if emailData["content"]:
+                emailText = getEmail.json()["text"]
+                code = re.search(r'Security code:\s*(\d+)', emailText).group(1)
 
-                    finalData = requests.get(
-                        url = f"https://donarev419.com/api/emails/{emailData["content"][0]["id"]}",
-                        headers = {
-                            "Authorization": key
-                        }
-                    ).json()
+                return code
 
-                    code = re.search(r"Security code:\s*<\/?[^>]*>\s*(\d{6})", finalData["content"]["html"]).group(1)
-
-                    return code
-
-                else:
-                    # Prevent Ratelimiting
-                    time.sleep(0.8)
-                    continue
+            await asyncio.sleep(0.8)
+            continue

@@ -1,15 +1,18 @@
-import requests
+import httpx
 
-def getProfile(ssid: str):
+async def getProfile(ssid: str):
     
-    response = requests.get(
-        url = "https://api.minecraftservices.com/minecraft/profile",
-        headers = {
-            "Authorization": f"Bearer {ssid}"
-        }
-    )
+    async with httpx.AsyncClient() as session:
 
-    if "name" in response.json():
-        return response.json()["name"]
-    
-    return None
+        response = await session.get(
+            url = "https://api.minecraftservices.com/minecraft/profile",
+            headers = {
+                "Authorization": f"Bearer {ssid}"
+            }
+        )
+        
+        rjson = response.json()
+        if "name" in rjson:
+            return rjson["name"]
+        
+        return None

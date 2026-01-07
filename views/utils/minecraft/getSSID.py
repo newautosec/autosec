@@ -1,17 +1,20 @@
-import requests
+import httpx
 
-def getSSID(xbl: str):
-    
-    response = requests.post(
-        url = "https://api.minecraftservices.com/authentication/login_with_xbox",
-        json = {
-            "identityToken": xbl,
-            "ensureLegacyEnabled": True
-        }
-    )
+async def getSSID(xbl: str):
 
-    if "access_token" in response.json():
-        return response.json()["access_token"]
-    
-    return None
+    async with httpx.AsyncClient() as session:
+
+        response = await session.post(
+            url = "https://api.minecraftservices.com/authentication/login_with_xbox",
+            json = {
+                "identityToken": xbl,
+                "ensureLegacyEnabled": True
+            }
+        )
+
+        jresponse = response.json()
+        if "access_token" in jresponse:
+            return jresponse["access_token"]
+
+        return None
     

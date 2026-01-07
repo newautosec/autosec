@@ -1,17 +1,34 @@
-import requests
+import httpx
 
-def generateEmail(email: str, domain: str, key: str) -> str:
+async def generateEmail(email: str, password: str) -> str:
 
-    requests.post(
-        url = "https://donarev419.com/api/emails/address",
-        headers = {
-            "Authorization": key
-        },
-        json = {
-            "domain": domain,
-            "local": email
-        }
-    )
+    async with httpx.AsyncClient() as session:
+
+        await session.post(
+            url = "https://api.mail.tm/accounts",
+            headers = {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            json = {
+                "address": email,
+                "password": password
+            }
+        )
+
+        token = await session.post(
+            url = "https://api.mail.tm/token",
+            headers = {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            json = {
+                "address": email,
+                "password": password
+            }
+        )
+
+        return token.json()["token"]
 
 
     

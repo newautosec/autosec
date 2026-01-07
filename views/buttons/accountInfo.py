@@ -1,10 +1,9 @@
 from discord import ui
 import discord
 
-
 from views.modals.dmEmbed import dmEmbed
 class accountInfo(ui.View):
-    def __init__(self, accountInfo: discord.Embed, mcInfo: discord.Embed, user: discord.user):
+    def __init__(self, accountInfo: discord.Embed, mcInfo: discord.Embed, user):
         super().__init__(timeout=None)
         self.user = user
         self.accInfo = accountInfo
@@ -18,8 +17,8 @@ class accountInfo(ui.View):
                 await interaction.response.send_message(f"<@{self.user}> has been sucessfully banned!" )
             except Exception:
                 await interaction.response.send_message(f"Failed to ban <@{self.user.id}>! (Invalid Perms / Already)")
-        else:
-            interaction.response.send_message("You do not have the neccessary permissions!", ephemeral=True)
+        
+        interaction.response.send_message("You do not have the neccessary permissions!", ephemeral=True)
 
     @discord.ui.button(label="Kick", style=discord.ButtonStyle.red, custom_id="persistent:button_kick")
     async def kickButton(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -29,8 +28,8 @@ class accountInfo(ui.View):
                 await interaction.response.send_message(f"<@{self.user.id}> has been sucessfully kicked!")
             except Exception:
                 await interaction.response.send_message(f"Failed to kick <@{self.user.id}>! (Invalid Perms / Not in server)")
-        else:
-            interaction.response.send_message("You do not have the neccessary permissions!", ephemeral=True)
+
+        interaction.response.send_message("You do not have the neccessary permissions!", ephemeral=True)
 
     @discord.ui.button(label="Unban", style=discord.ButtonStyle.primary, custom_id="persistent:button_unban")
     async def unbanButton(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -49,16 +48,16 @@ class accountInfo(ui.View):
 
     @discord.ui.button(label="Owner Info", style=discord.ButtonStyle.primary, custom_id="persistent:button_ownerinfo")
     async def infoButton(self, interaction: discord.Interaction, button: discord.ui.Button):
-
         await interaction.response.send_message(
             embed = self.accInfo,
             ephemeral = True
         )
 
-    @discord.ui.button(label="Minecraft", style=discord.ButtonStyle.grey, custom_id="persistent:button_dm")
+    @discord.ui.button(label="Minecraft", style=discord.ButtonStyle.green, custom_id="persistent:button_minecraft")
     async def showMinecraft(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_modal(
-            embed = self.mcInfo
+        await interaction.response.send_message(
+            embed = self.mcInfo,
+            ephemeral = True
         )
 
         

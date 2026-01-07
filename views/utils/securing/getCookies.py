@@ -1,21 +1,23 @@
 from views.utils.parsers.decode import decode
-import requests
+import httpx
 import re
 
-def getCookies():
-    apicanary = None
-    amsc = None
+async def getCookies():
     
-    data = requests.get(
-        url="https://account.live.com/password/reset",
-        allow_redirects=False
-    )
-    
-    apicanary = decode(re.search(r'"apiCanary":"([^"]+)"', data.text).group(1))
-    
-    for cookie in data.cookies:
-        if cookie.name == "amsc":
-            amsc = cookie.value
-            break
-    
-    return [apicanary, amsc]
+    async with httpx.AsyncClient() as session:
+
+        data = await session.get(
+            url="https://account.live.com/password/reset",
+            follow_redirects = False
+        )
+
+        apicanary = await decode(
+            re.search(
+                r'"apiCanary":"([^"]+)"', 
+                data.text
+            ).group(1)
+        )
+
+        amsc = data.cookies["amsc"]
+            
+        return [apicanary, amsc]

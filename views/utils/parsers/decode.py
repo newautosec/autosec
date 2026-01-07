@@ -1,7 +1,7 @@
-import urllib
+import urllib.parse
 import re
 
-def decode(code):
+async def decode(code):
     decoded_url = urllib.parse.unquote(code)
     decoded_text = re.sub(
         r'\\u([0-9A-Fa-f]{4})',

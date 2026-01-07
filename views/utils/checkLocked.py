@@ -1,10 +1,13 @@
-import requests
+import httpx
 
 async def checkLocked(email: str) -> dict:
-    
+
     # Times out sometimes...
     try:
-        lockedInfo = requests.post(
+
+        async with httpx.AsyncClient() as session:
+
+            lockedInfo = await session.post(
                 url = "https://support.microsoft.com/nl-NL/api/contactus/v1/ExecuteAlchemySAFAction?SourceApp=soc2",
                 headers = {
                     "Accept": "*/*",
@@ -24,8 +27,9 @@ async def checkLocked(email: str) -> dict:
                     "V2": True
                 },
                 timeout = 5
-            ).json()
-        
-        return lockedInfo
+            )
+
+            return lockedInfo.json()
+
     except Exception:
         return None

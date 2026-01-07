@@ -5,8 +5,7 @@
 
     "tokens" : { 
         "bot_token": "",
-        "hypixel_key": "",
-        "donarev_token": ""
+        "hypixel_key": ""
     },
 
     "discord" : {

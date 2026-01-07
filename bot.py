@@ -1,14 +1,15 @@
-import logging
-import os
-import sys
-
-import discord
 from discord.ext import commands
-
+import logging
+import discord
 import json
+import sys
+import os
+
 from views.buttons.button_one import ButtonViewOne
+from database.database import DBConnection
 
 config = json.load(open("config.json", "r+"))
+
 class DiscordBot(commands.Bot):
     def __init__(self):
         super().__init__(
@@ -49,14 +50,30 @@ class DiscordBot(commands.Bot):
                 )
                 self.logger.info(f"Loaded: {file[:-3]}")
             elif not (
-                file in ["__pycache__"] or file.endswith(("pyc", "txt"))
+                file in ["__pycache__", "utils"] or file.endswith(("pyc", "txt"))
             ) and not file.startswith("_"):
                 await self.load_cogs(f"{directory}/{file}")
 
         await self.load_extension("jishaku")
 
 
+with DBConnection() as database:
+    
+    database.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS `security_emails` (
+                email TEXT,
+                password TEXT
+            )
+        """)
+
+    database.conn.commit()
+
 bot = DiscordBot()
+
 bot.remove_command("help")
 bot.setup_logging()
-bot.run(config["tokens"]["bot_token"], log_handler=None)
+
+bot.run(
+    config["tokens"]["bot_token"], 
+    log_handler = None
+)

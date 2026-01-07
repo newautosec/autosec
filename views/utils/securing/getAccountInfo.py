@@ -1,4 +1,4 @@
-import requests
+import httpx
 
 def getAccountInfo() -> dict:
     """
