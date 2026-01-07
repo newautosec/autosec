@@ -100,7 +100,7 @@ class MyCog(commands.Cog):
             await interaction.response.send_message("You do not have permission to execute this command!", ephemeral=True)
 
         with DBConnection() as db:
-            password = db.getEmailPassword(email)[0]
+            password = db.getEmailPassword(email)
 
             if not password:
                 await interaction.response.send_message("This email has not been found.", ephemeral=True)
@@ -116,18 +116,18 @@ class MyCog(commands.Cog):
                 },
                 json = {
                     "address": email,
-                    "password": password
+                    "password": password[0]
                 }
             )
 
             token = data.json()["token"]
         
-        getEmails = await fetchEmails(token, email, password)
+        getEmails = await fetchEmails(token, email, password[0])
 
         if getEmails:
             interaction = await interaction.response.send_message(
                 embed = getEmails,
-                view = ButtonRefresh(token, email, password, interaction),
+                view = ButtonRefresh(token, email, password[0], interaction),
                 ephemeral=True
             )
             return
