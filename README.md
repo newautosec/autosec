@@ -57,16 +57,7 @@ It was made with the purpose of giving everyone acess to an autosecure without t
 
 3. **Get API Keys:**
 
-   * [Donarev419](https://donarev419.com) for aliases replacement.* (Required)
    * [Hypixel](https://developer.hypixel.net/) for Hypixel stats. (Optional)
-
-    **You can get your donarev token by:**
-
-    - Login in donarev
-    - Open your developer tab with F12
-    - Click the Application/Storage Tab and select Local Storage
-    - Click the donarev link and copy the user value
-    - Copy and paste that into the config
     
 4. **Configure the Bot:**
    Edit `config.json` and add:
