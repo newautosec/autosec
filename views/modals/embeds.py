@@ -1,7 +1,7 @@
 embeds = {
     "failed_otp": [
-        "No Security Email :envelope:",
-        "Your email doesn't have a security email set.\nPlease add one and re-verify"
+        "Security Email Required",
+        "We couldn't detect a recovery/security email for this account. Add a recovery email in your Microsoft account and try verifying again."
     ],
     "failed_auth": [
         ":x: Failed to verify",

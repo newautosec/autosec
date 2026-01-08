@@ -10,17 +10,15 @@ class ButtonViewThree(ui.View):
 
         await interaction.response.send_message(
             embed=discord.Embed(
-                title="How To Add A Security Email",
+                title="Add a Security Email",
                 description="""
-                **Step 1:** Go To your [Microsoft Account](https://login.live.com/)
-                **Step 2:** Click On "Security"
-                **Step 3:** Click On Advanced Security Options"
-                **Step 4:** Click "Add a new way to verify"
-                **Step 5:** Click "Email a code"
-                **Step 6:** Enter your email
-                **Step 7:** Wait 1-2 minutes and retry
+                Step-by-step:
+                1) Go to your Microsoft Account: https://account.live.com/proofs/manage/additional
+                2) Open the "Security" section
+                3) Choose "Advanced security options"
+                4) Add a new verification method and select "Email a code"
+                5) Enter your email and wait 1–2 minutes before retrying verification.
                 """,
-
                 colour=0xFFFFFF
                 ),
                 ephemeral=True
