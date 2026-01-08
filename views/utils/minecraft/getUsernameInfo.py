@@ -13,11 +13,18 @@ async def getUsernameInfo(ssid: str):
             }
         )
         
-        if response.json()["nameChangeAllowed"]:
+        response = response.json()
+        if response["nameChangeAllowed"]:
             return True
-
+        
         todayDate = datetime.datetime.now()
-        finalDate = (parser.parse(response.json()["changedAt"]) + datetime.timedelta(days=31)).replace(tzinfo=None)
+
+        if "changedAt" in response:
+            changeDate = response["changedAt"]
+        else:
+            changeDate = response["createdAt"]
+
+        finalDate = (parser.parse(changeDate) + datetime.timedelta(days=31)).replace(tzinfo=None)
 
         # Amount of days to change username
         return (finalDate - todayDate).days
