@@ -32,5 +32,13 @@ class DBConnection:
         self.conn.commit()
 
         return password
+    
+    def getEmails(self) -> tuple:
+
+        emails = self.cursor.execute("""
+            SELECT email FROM `security_emails`
+        """).fetchall()
+
+        return emails
 
 

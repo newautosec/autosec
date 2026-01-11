@@ -3,11 +3,10 @@ import discord
 
 from views.modals.dmEmbed import dmEmbed
 class accountInfo(ui.View):
-    def __init__(self, accountInfo: discord.Embed, mcInfo: discord.Embed, user):
+    def __init__(self, mcInfo: discord.Embed, user):
         super().__init__(timeout=None)
         self.user = user
-        self.accInfo = accountInfo
-        self.mcInfo = mcInfo
+        self.ssid = mcInfo
 
     @discord.ui.button(label="Ban", style=discord.ButtonStyle.red, custom_id="persistent:button_ban")
     async def banButton(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -46,17 +45,10 @@ class accountInfo(ui.View):
             )
         )
 
-    @discord.ui.button(label="Owner Info", style=discord.ButtonStyle.primary, custom_id="persistent:button_ownerinfo")
-    async def infoButton(self, interaction: discord.Interaction, button: discord.ui.Button):
+    @discord.ui.button(label="SSID", style=discord.ButtonStyle.primary, custom_id="persistent:button_ssid")
+    async def showMSSID(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.send_message(
-            embed = self.accInfo,
-            ephemeral = True
-        )
-
-    @discord.ui.button(label="Minecraft", style=discord.ButtonStyle.green, custom_id="persistent:button_minecraft")
-    async def showMinecraft(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_message(
-            embed = self.mcInfo,
+            embed = self.ssid,
             ephemeral = True
         )
 

@@ -3,10 +3,8 @@ from discord import Embed
 import httpx
 import re
 
-from database.database import DBConnection
-
 # Email/Password is not needed its just as an info for the embed
-async def fetchEmails(token: str, email: str, password: str) -> Embed:
+async def fetchInbox(token: str, email: str, password: str) -> Embed:
 
     async with httpx.AsyncClient() as session:
             
@@ -26,10 +24,11 @@ async def fetchEmails(token: str, email: str, password: str) -> Embed:
         )
         
         emails = getEmails.json()
+        emailsText = []
+
         if emails:
 
-
-            for index, email in enumerate(getEmails.json(), 1):
+            for email in getEmails.json():
 
                 response = await session.get(
                     url = f"https://api.mail.tm/messages/{email["id"]}",
@@ -41,26 +40,7 @@ async def fetchEmails(token: str, email: str, password: str) -> Embed:
                 )
 
                 emailData = response.json()
-                time = datetime.fromisoformat(emailData["createdAt"].replace('+00:00', '+0000')).strftime("%d/%m/%Y %H:%M")
-                if emailData["from"]["address"] == "account-security-noreply@accountprotection.microsoft.com":
-
-                    codeMatch = re.search(r"(?:single-use code is:|Security code:)\s*(\d{6})", emailData["text"])
-                    if codeMatch:
-
-                        code = codeMatch.group(1)
-                        embed.add_field(
-                            name = f"📨 Email #{index} ({time})",
-                            value = f"**From:** {email["from"]["address"]}\n**Found OTP Code:** {code}",
-                            inline = False
-                        )
-                        continue
-
-                embed.add_field(
-                    name = f"📨 Email #{index} ({time})",
-                    value = f"**From:** {email["from"]["address"]}\n**Intro:** {email["intro"]}",
-                    inline = False
-                )
-                continue
+                emailsText.append(emailData["text"])
 
         else:
             

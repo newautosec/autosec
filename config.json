@@ -2,12 +2,12 @@
     "owners": [
 
     ],
-
-    "tokens" : { 
+    "tokens" : {
         "bot_token": "",
-        "hypixel_key": ""
+        "hypixel_key": "",
+        "donut_key": ""
     },
-
+    
     "discord" : {
         "logs_channel": "",
         "accounts_channel": ""
