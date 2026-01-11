@@ -20,3 +20,5 @@ class ButtonTOTP(ui.View):
                 description = f"```{getTOTP}```"
             )
         )
+
+        await interaction.response.defer()

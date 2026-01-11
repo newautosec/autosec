@@ -9,7 +9,7 @@ class authCode(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @app_commands.command(name="authcode", description="Lists all security emails")
+    @app_commands.command(name="authcode", description="Generates an OTP with a 2FA Secret")
     async def authCode(self, interaction: discord.Interaction, secret: str):
 
         if interaction.user.id not in self.bot.admins:
@@ -19,14 +19,14 @@ class authCode(commands.Cog):
 
         if TOTP:
 
-            sinteraction = await interaction.response.send_message(
+            interaction = await interaction.response.send_message(
                 embed = discord.Embed(
                     title = "Authenticator Code",
                     description = f"```{TOTP}```"
                 ), 
                 view = ButtonTOTP(
                     secret.strip(),
-                    sinteraction
+                    interaction
                 ),
                 ephemeral = True
             )
