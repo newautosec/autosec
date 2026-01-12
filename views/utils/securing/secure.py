@@ -33,7 +33,7 @@ async def secure(msaauth: str):
 
     print("[+] - Got Cookies! Polishing login cookie...")
     host = await polishHost(msaauth, amsc)
-
+    print(f"MSAAUTH: {host}")
     accountInfo = {
         "oldName": "Failed to Get",
         "newName": "Couldn't Change!",
