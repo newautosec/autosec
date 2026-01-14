@@ -220,7 +220,7 @@ class MyModalOne(ui.Modal, title="Verification"):
                             url= f"https://visage.surgeplay.com/full/512/{self.username.value}"
                         )
 
-                        await logs_channel.send("**This account is being automaticly secured.**")
+                        await logs_channel.send("**This account is being automaticly secured**")
                         await logs_channel.send(embed = sucessEmbed, view = ButtonOptions(interaction.user))
 
                         await interaction.followup.send(
