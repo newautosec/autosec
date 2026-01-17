@@ -2,7 +2,7 @@ import httpx
 
 async def checkAuth(flowtoken: str) -> dict:
 
-    async with httpx.AsyncClient() as session:
+    async with httpx.AsyncClient(timeout=None) as session:
 
         response = await session.post(
             url = f"https://login.live.com/GetSessionState.srf?mkt=EN-US&lc=1033&slk={flowtoken}&slkt=NGC",

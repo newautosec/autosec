@@ -2,7 +2,7 @@ import httpx
 
 async def getGamertag(xbl: str) -> str:
 
-    async with httpx.AsyncClient() as session:
+    async with httpx.AsyncClient(timeout=None) as session:
 
         gamertag = await session.post(
             url = "https://xsts.auth.xboxlive.com/xsts/authorize",

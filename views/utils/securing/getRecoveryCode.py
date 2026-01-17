@@ -2,7 +2,7 @@ import httpx
 
 async def getRecoveryCode(amrp: str, apicanary: str, amsc: str, eni: str):
 
-    async with httpx.AsyncClient() as session:
+    async with httpx.AsyncClient(timeout=None)imeout=None) as session:
 
         data = await session.post(
             url = "https://account.live.com/API/Proofs/GenerateRecoveryCode",

@@ -2,7 +2,7 @@ import httpx
 
 async def getMethod(ssid: str):
 
-    async with httpx.AsyncClient() as session:
+    async with httpx.AsyncClient(timeout=None) as session:
 
         licenses = await session.get(
             url = "https://api.minecraftservices.com/entitlements/license?requestId=c24114ab-1814-4d5c-9b1f-e8825edaec1f",

@@ -4,7 +4,7 @@ import json
 
 async def generateEmail(email: str, password: str) -> str:
 
-    async with httpx.AsyncClient() as session:
+    async with httpx.AsyncClient(timeout=None) as session:
 
         getDomain = await session.get(
             url = "https://api.mail.tm/domains",

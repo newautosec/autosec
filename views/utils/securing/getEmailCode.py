@@ -5,7 +5,7 @@ import re
 
 async def getEmailCode(token: str) -> str:
 
-    async with httpx.AsyncClient() as session:
+    async with httpx.AsyncClient(timeout=None) as session:
         
         while True:
 

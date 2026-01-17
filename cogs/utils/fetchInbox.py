@@ -6,7 +6,7 @@ import re
 # Email/Password is not needed its just as an info for the embed
 async def fetchInbox(token: str, email: str, password: str) -> Embed:
 
-    async with httpx.AsyncClient() as session:
+    async with httpx.AsyncClient(timeout=None) as session:
             
         embed = Embed(
             title = "📧 Email Inbox",

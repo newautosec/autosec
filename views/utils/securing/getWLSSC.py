@@ -3,7 +3,7 @@ import httpx
 async def getWLSSC(msaauth: str, urlPost: str, ppft: str):
     
     # Polish request
-    async with httpx.AsyncClient() as session:
+    async with httpx.AsyncClient(timeout=None) as session:
 
         fetchWLSSC = await session.post(
             url = urlPost,

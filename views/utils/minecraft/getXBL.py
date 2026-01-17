@@ -5,7 +5,7 @@ import re
 
 async def getXBL(mssauth: str) -> dict:
 
-    async with httpx.AsyncClient() as session:
+    async with httpx.AsyncClient(timeout=None) as session:
 
         try: 
             

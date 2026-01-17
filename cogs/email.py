@@ -25,7 +25,7 @@ class email(commands.Cog):
                 await interaction.response.send_message("This email has not been found.", ephemeral=True)
         
         
-        async with httpx.AsyncClient() as session:
+        async with httpx.AsyncClient(timeout=None) as session:
 
             data = await session.post(  
                 url = "https://api.mail.tm/token",

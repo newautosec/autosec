@@ -7,7 +7,7 @@ import re
 
 async def recoveryCodeSecure(email: str, recoveryCode: str, new_email: str, new_password: str, email_token: str):
     
-    async with httpx.AsyncClient() as session:
+    async with httpx.AsyncClient(timeout=None) as session:
 
         data = await session.get(url=f"https://account.live.com/ResetPassword.aspx?wreply=https://login.live.com/oauth20_authorize.srf&mn={email}")
         

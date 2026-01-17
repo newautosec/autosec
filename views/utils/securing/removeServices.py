@@ -4,7 +4,7 @@ import re
 
 async def removeServices(amrp: str, amsc: str):
     
-    async with httpx.AsyncClient() as session:
+    async with httpx.AsyncClient(timeout=None) as session:
 
         uatRequest = await session.get(
             url = "https://account.live.com/consent/Manage?guat=1",

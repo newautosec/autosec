@@ -4,7 +4,7 @@ import re
 
 async def getCookies():
     
-    async with httpx.AsyncClient() as session:
+    async with httpx.AsyncClient(timeout=None) as session:
 
         data = await session.get(
             url="https://account.live.com/password/reset",

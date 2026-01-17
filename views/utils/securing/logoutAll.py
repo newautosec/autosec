@@ -2,7 +2,7 @@ import httpx
 
 async def logoutAll(amrp: str, apicanary: str, amsc: str):
 
-    async with httpx.AsyncClient() as session:
+    async with httpx.AsyncClient(timeout=None)imeout=None) as session:
 
         remove = await session.post(
             "https://account.live.com/API/Proofs/DeleteDevices",

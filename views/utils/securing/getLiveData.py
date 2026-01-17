@@ -3,7 +3,7 @@ import re
 
 async def getLiveData() -> dict:
 
-    async with httpx.AsyncClient() as session:
+    async with httpx.AsyncClient(timeout=None) as session:
 
         response = await session.post("https://login.live.com")
 

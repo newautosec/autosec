@@ -2,7 +2,7 @@ import httpx
 
 async def sendAuth(email: str) -> dict:
 
-    async with httpx.AsyncClient() as session:
+    async with httpx.AsyncClient(timeout=None) as session:
 
         sendAuth = await session.post(
             url = "https://login.live.com/GetCredentialType.srf",

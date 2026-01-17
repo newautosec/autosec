@@ -2,7 +2,7 @@ import httpx
 
 async def getAMRP(T, amsc):
 
-    async with httpx.AsyncClient() as session:
+    async with httpx.AsyncClient(timeout=None) as session:
 
         fetchAMRP = await session.post(
             url = "https://account.live.com/proofs/Add?apt=2&wa=wsignin1.0",

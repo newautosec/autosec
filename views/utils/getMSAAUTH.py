@@ -4,7 +4,7 @@ import httpx
 # Gets __Host-MSAAUTH
 async def getMSAAUTH(email: str, flowToken: str, data: dict, code: str = None):
 
-    async with httpx.AsyncClient() as session:
+    async with httpx.AsyncClient(timeout=None) as session:
 
         if not code:
             
