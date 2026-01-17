@@ -50,7 +50,7 @@ It was made with the purpose of giving everyone acess to an autosecure without t
 ## How to Set Up
 
 1. **Install Python 3.12:**
-   [Download Here](https://www.python.org/downloads/release/python-3110/)
+   [Download Here](https://www.python.org/downloads/release/python-3120/)
 
 2. **Create a Bot:**
    Get a Discord bot token and enable all intents [here](https://discord.com/developers/applications).
